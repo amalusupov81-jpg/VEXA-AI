@@ -1,46 +1,47 @@
-import streamlit as st
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.label import Label
+from kivy.uix.textinput import TextInput
+from kivy.uix.button import Button
+from kivy.core.window import Window
 
-st.set_page_config(
-    page_title="VEXA AI",
-    page_icon="💜",
-    layout="centered"
-)
+Window.clearcolor = (0.04, 0.02, 0.08, 1)
 
-st.markdown("""
-<style>
-.stApp {
-    background: #090610;
-    color: white;
-}
-h1 {
-    color: #a855f7;
-}
-.stChatMessage {
-    background: #1b1029;
-    border-radius: 15px;
-}
-</style>
-""", unsafe_allow_html=True)
+class VexaAI(App):
+    def build(self):
+        layout = BoxLayout(
+            orientation="vertical",
+            padding=15,
+            spacing=10
+        )
 
-st.title("💜 VEXA AI")
-st.caption("Твой персональный ИИ-помощник")
+        title = Label(
+            text="[b]VEXA AI[/b]",
+            markup=True,
+            font_size=32,
+            color=(0.7, 0.3, 1, 1),
+            size_hint_y=0.2
+        )
 
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+        self.chat = Label(
+            text="Привет! Я VEXA AI 💜",
+            color=(1, 1, 1, 1)
+        )
 
-for message in st.session_state.messages:
-    with st.chat_message(message["role"]):
-        st.write(message["content"])
+        self.input = TextInput(
+            hint_text="Напиши сообщение...",
+            size_hint_y=0.15,
+            multiline=False
+        )
 
-prompt = st.chat_input("Напиши VEXA что-нибудь...")
+        button = Button(
+            text="ОТПРАВИТЬ",
+            background_color=(0.5, 0.1, 0.8, 1),
+            size_hint_y=0.15
+        )
 
-if prompt:
-    st.session_state.messages.append({
-        "role": "user",
-        "content": prompt
-    })
+        button.bind(on_press=self.send_message)
 
-    with st.chat_message("user"):
-        st.write(prompt)
-
-    answer = "Привет! Я V
+        layout.add_widget(title)
+        layout.add_widget(self.chat)
+        layout.add_widget(self.input
